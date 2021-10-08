@@ -1,5 +1,5 @@
 # Create image based off of our express back end base image
-FROM base-front
+FROM base-back
 
 # Get all the code needed to run the app
 COPY . .

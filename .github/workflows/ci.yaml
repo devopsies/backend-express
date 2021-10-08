@@ -14,7 +14,9 @@ jobs:
           
       - name: "Test containerized app"
         run: |
-          docker run -d --name my-app -p 3000:3000 back-app
+          docker run -d -p 27017:27017 -p 27019:27019 -e MONGO_INITDB_ROOT_USERNAME=user1 -e MONGO_INITDB_ROOT_PASSWORD=pass1 --name my-db mongo
+          docker run -d -p 3000:3000 --name my-app --network host back-app
           sleep 5
           curl localhost:3000
           docker stop my-app
+          docker stop my-db

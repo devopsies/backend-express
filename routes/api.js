@@ -4,11 +4,22 @@ const express = require('express');
 const router = express.Router();
 
 // MongoDB URL from the docker-compose file
-const dbHost = 'mongodb+srv://user1:pass1@database';
+const dbHost = 'mongodb://localhost/mydb';
 
 // Connect to mongodb
-mongoose.connect(dbHost);
-
+mongoose.connect(dbHost, {
+	"auth": { "authSource": "admin" },
+	"user": "user1",
+	"pass": "pass1",
+	"useMongoClient": true
+}, function(err){
+	if (err){
+		console.log(err);
+	}else{
+		console.log('Connected!');
+	}
+});
+console.log('here');
 // create mongoose schema
 const userSchema = new mongoose.Schema({
   name: String,
@@ -26,17 +37,15 @@ router.get('/', (req, res) => {
 /* GET all users. */
 router.get('/users', (req, res) => {
 	User.find({}, (err, users) => {
-		if (err) res.status(500).send(error)
-
-		res.status(200).json(users);
+		if (err) res.status(500).send(error);
+		res.status(200).send(users);
 	});
 });
 
 /* GET one users. */
 router.get('/users/:id', (req, res) => {
 	User.findById(req.params.id, (err, users) => {
-		if (err) res.status(500).send(error)
-
+		if (err) res.status(500).send(error);
 		res.status(200).json(users);
 	});
 });
@@ -50,7 +59,6 @@ router.post('/users', (req, res) => {
 
 	user.save(error => {
 		if (error) res.status(500).send(error);
-
 		res.status(201).json({
 			message: 'User created successfully'
 		});
