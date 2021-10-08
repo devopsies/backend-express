@@ -1,0 +1,20 @@
+name: project-ci
+on: [push]
+jobs:
+  run:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: "Build base image"
+        run: docker build -t base-back -f base.Dockerfile .
+          
+      - name: "Build and containerize app"
+        run: docker build -t back-app .
+          
+      - name: "Test containerized app"
+        run: |
+          docker run -d --name my-app -p 3000:3000 back-app
+          sleep 5
+          curl localhost:3000
+          docker stop my-app
