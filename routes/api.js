@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 // MongoDB URL from the docker-compose file
-const dbHost = 'mongodb+srv://user1:pass1@database';
+const dbHost = 'mongodb+srv://user1:pass1@localhost';
 
 // Connect to mongodb
 mongoose.connect(dbHost);
