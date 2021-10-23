@@ -30,12 +30,12 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 /* GET api listing. */
-router.get('/', (req, res) => {
+router.get('/api', (req, res) => {
 		res.send('api works');
 });
 
 /* GET all users. */
-router.get('/users', (req, res) => {
+router.get('/api/users', (req, res) => {
 	User.find({}, (err, users) => {
 		if (err) res.status(500).send(error);
 		res.status(200).send(users);
@@ -43,7 +43,7 @@ router.get('/users', (req, res) => {
 });
 
 /* GET one users. */
-router.get('/users/:id', (req, res) => {
+router.get('/api/users/:id', (req, res) => {
 	User.findById(req.params.id, (err, users) => {
 		if (err) res.status(500).send(error);
 		res.status(200).json(users);
@@ -51,7 +51,7 @@ router.get('/users/:id', (req, res) => {
 });
 
 /* Create a user. */
-router.post('/users', (req, res) => {
+router.post('/api/users', (req, res) => {
 	let user = new User({
 		name: req.body.name,
 		age: req.body.age
