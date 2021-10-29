@@ -36,7 +36,7 @@ jobs:
         run: |
           docker run -d -p 27017:27017 -p 27019:27019 -e MONGO_INITDB_ROOT_USERNAME=user1 -e MONGO_INITDB_ROOT_PASSWORD=pass1 --name my-db mongo
           sleep 5
-          docker run -d -e DB_USERNAME=user1 -e DB_PASSWORD=pass1 -e DB_HOST=localhost --name my-app --network host back-app
+          docker run -d -p 3000:3000 -e DB_USERNAME=user1 -e DB_PASSWORD=pass1 -e DB_HOST=$(hostname) --name my-app back-app
           sleep 5
           docker ps --all
           docker logs my-app
