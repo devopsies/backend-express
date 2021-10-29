@@ -2,15 +2,16 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+require('dotenv').config();
 
 // MongoDB URL from the docker-compose file
-const dbHost = 'mongodb://localhost/mydb';
+const dbHost = 'mongodb://' + process.env.DB_HOST + '/mydb';
 
 // Connect to mongodb
 mongoose.connect(dbHost, {
 	"auth": { "authSource": "admin" },
-	"user": "user1",
-	"pass": "pass1",
+	"user": process.env.DB_USERNAME,
+	"pass": process.env.DB_PASSWORD,
 	"useMongoClient": true
 }, function(err){
 	if (err){
@@ -19,7 +20,9 @@ mongoose.connect(dbHost, {
 		console.log('Connected!');
 	}
 });
-console.log('here');
+
+console.log('debugging here');
+
 // create mongoose schema
 const userSchema = new mongoose.Schema({
   name: String,
