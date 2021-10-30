@@ -1,0 +1,49 @@
+kind: Deployment
+metadata:
+  name: db-app-deployment
+  labels:
+    app: db-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-app
+  template:
+    metadata:
+      labels:
+        app: db-app
+    spec:
+      containers:
+      - name: db-app
+        image: mongodb
+        ports:
+        - containerPort: 27017
+        - containerPort: 27019
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: db-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: db-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-app-service
+spec:
+  selector:
+    app: db-app
+  ports:
+    - name: port1
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+    - name: port2
+      protocol: TCP
+      port: 27019
+      targetPort: 27019

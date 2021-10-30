@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: back-app-deployment
+  labels:
+    app: back-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: back-app
+  template:
+    metadata:
+      labels:
+        app: back-app
+    spec:
+      containers:
+      - name: back-app
+        image: mdnfiras/back-app
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: db-username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: db-password
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: db-host
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-app-service
+spec:
+  selector:
+    app: back-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
